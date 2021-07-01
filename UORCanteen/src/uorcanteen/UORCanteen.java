@@ -5,6 +5,9 @@
  */
 package uorcanteen;
 
+import ClassSet.EmailSend;
+import UI.LogReg;
+
 /**
  *
  * @author G I U S Chamika
@@ -15,7 +18,8 @@ public class UORCanteen {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        LogReg log =new LogReg("No");
+        log.setVisible(true);
     }
     
 }

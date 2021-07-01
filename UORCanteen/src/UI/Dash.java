@@ -5,17 +5,75 @@
  */
 package UI;
 
+import static UI.LogReg2.session;
+import static UI.LogReg2.session2;
+import com.mysql.jdbc.CallableStatement;
+import java.sql.ResultSet;
+import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.JOptionPane;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import pojo.Reglist;
+import pojo.User;
+import sesion.HibernateUtil;
+
 /**
  *
  * @author G I U S Chamika
  */
 public class Dash extends javax.swing.JFrame {
 
-    /**
-     * Creates new form LogReg
-     */
-    public Dash() {
+    static Session session=null;
+    int loguser =0;
+    public Dash(String page) {
         initComponents();
+        
+        loguser=LogReg.Lloguserid;
+        
+        if(page.equals("No")){
+            session=HibernateUtil.getSessionFactory().openSession();
+            Transaction tx=session.beginTransaction();
+            String user_sql="FROM User";
+            Query user_quary=session.createQuery(user_sql);
+
+            java.util.List <User>userList=user_quary.list();
+                for(Iterator<User> userIterator=userList.iterator();userIterator.hasNext();){
+                    User user=userIterator.next();
+                    if(user.getUserId().equals(loguser)){
+                        jLabel3.setText(user.getUserReg());
+                        jLabel5.setText(user.getUserFullName());
+                        jLabel4.setText(user.getUserEmail());
+                    }
+            }
+
+            homeinner hom=new homeinner();
+            deskpanel.removeAll();
+            deskpanel.add(hom).setVisible(true);
+        }else{
+            canteen cant=new canteen();
+            deskpanel.removeAll();
+            deskpanel.add(cant).setVisible(true);
+        }
+        
+        Session session2=null;
+            session2=HibernateUtil.getSessionFactory().openSession();
+            final AtomicReference<ResultSet> selordr=new AtomicReference<>();
+            session2.doWork(connection->{
+                try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call countnoty(?)}")){
+                    cst.setInt(1, loguser);
+                    cst.execute();
+                    selordr.set(cst.getResultSet());
+                    try(ResultSet rs =cst.getResultSet()){
+                        while(rs.next()){
+                            
+                            jLabel19.setText(rs.getString("COUNT(notify_id)"));
+                            
+                        }
+                    }
+                }
+            });
     }
 
     /**
@@ -37,8 +95,9 @@ public class Dash extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jTextField2 = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -48,18 +107,19 @@ public class Dash extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         jLabel11 = new javax.swing.JLabel();
-        jSeparator3 = new javax.swing.JSeparator();
         jLabel12 = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JSeparator();
         jLabel13 = new javax.swing.JLabel();
-        jSeparator5 = new javax.swing.JSeparator();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        jSeparator6 = new javax.swing.JSeparator();
         jLabel17 = new javax.swing.JLabel();
-        jSeparator7 = new javax.swing.JSeparator();
-        jPanel8 = new javax.swing.JPanel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23lkuy = new javax.swing.JLabel();
+        uguyy = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        deskpanel = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -73,7 +133,7 @@ public class Dash extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel2.setBackground(new java.awt.Color(51, 102, 255));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -82,11 +142,21 @@ public class Dash extends javax.swing.JFrame {
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bell.png"))); // NOI18N
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+        });
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 0, -1, 63));
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/power.png"))); // NOI18N
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 0, -1, 63));
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 0, -1, 63));
         jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 40, 250, -1));
 
         jTextField2.setBackground(new java.awt.Color(0, 102, 102));
@@ -100,15 +170,32 @@ public class Dash extends javax.swing.JFrame {
                 jTextField2ActionPerformed(evt);
             }
         });
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField2KeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField2KeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField2KeyTyped(evt);
+            }
+        });
         jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 10, 220, 30));
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(528, 11, -1, 27));
 
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/search.png"))); // NOI18N
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, -1, -1));
 
+        jLabel19.setBackground(new java.awt.Color(0, 204, 204));
+        jLabel19.setFont(new java.awt.Font("Tw Cen MT", 1, 18)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel19.setText("1");
+        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 20, 20, 20));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(528, 11, -1, 27));
+
         jLabel18.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel18.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 18)); // NOI18N
+        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Dash board");
         jLabel18.setIconTextGap(50);
@@ -148,11 +235,12 @@ public class Dash extends javax.swing.JFrame {
         jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 160, 20));
 
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel10.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 18)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/restaurant.png"))); // NOI18N
         jLabel10.setText("Canteen");
-        jLabel10.setIconTextGap(50);
+        jLabel10.setIconTextGap(20);
         jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel10MouseClicked(evt);
@@ -160,39 +248,85 @@ public class Dash extends javax.swing.JFrame {
         });
 
         jLabel11.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel11.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 18)); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/myorder.png"))); // NOI18N
         jLabel11.setText("My Order");
-        jLabel11.setIconTextGap(50);
+        jLabel11.setIconTextGap(20);
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
 
         jLabel12.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel12.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 18)); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/orhis.png"))); // NOI18N
         jLabel12.setText("Order History");
-        jLabel12.setIconTextGap(50);
+        jLabel12.setIconTextGap(20);
+        jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel12MouseClicked(evt);
+            }
+        });
 
         jLabel13.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel13.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 18)); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/add.png"))); // NOI18N
-        jLabel13.setText("Manage Food");
-        jLabel13.setIconTextGap(50);
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/profile.png"))); // NOI18N
+        jLabel13.setText("Manage Profile");
+        jLabel13.setIconTextGap(20);
+        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel13MouseClicked(evt);
+            }
+        });
 
-        jLabel15.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel15.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 18)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/neword.png"))); // NOI18N
-        jLabel15.setText("New Order");
-        jLabel15.setIconTextGap(50);
+        jLabel20.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bill.png"))); // NOI18N
+        jLabel20.setText("Last Bill");
+        jLabel20.setIconTextGap(20);
+        jLabel20.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel20MouseClicked(evt);
+            }
+        });
 
-        jLabel17.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel17.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 18)); // NOI18N
-        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/orsum.png"))); // NOI18N
-        jLabel17.setText("Order Summary");
-        jLabel17.setIconTextGap(50);
+        jLabel21.setBackground(new java.awt.Color(0, 255, 255));
+        jLabel21.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(0, 255, 255));
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home2.png"))); // NOI18N
+        jLabel21.setText("Home");
+        jLabel21.setToolTipText("");
+        jLabel21.setIconTextGap(20);
+        jLabel21.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel21MouseClicked(evt);
+            }
+        });
+
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/more_than.png"))); // NOI18N
+
+        jLabel23.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(0, 204, 204));
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/info.png"))); // NOI18N
+        jLabel23.setText("Feedback");
+        jLabel23.setIconTextGap(20);
+        jLabel23.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel23MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -202,73 +336,89 @@ public class Dash extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator7)
-                            .addComponent(jSeparator6)
-                            .addComponent(jSeparator5)
-                            .addComponent(jSeparator4)
-                            .addComponent(jSeparator3)
-                            .addComponent(jSeparator1)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel23lkuy, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(39, 39, 39))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(34, 34, 34)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(uguyy, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(36, 36, 36))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(40, 40, 40)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel21)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                    .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                    .addComponent(jLabel23lkuy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                    .addComponent(jLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                    .addComponent(uguyy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(56, 56, 56)
+                .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jPanel8.setBackground(new java.awt.Color(204, 204, 204));
+        deskpanel.setBackground(new java.awt.Color(204, 204, 204));
 
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        javax.swing.GroupLayout deskpanelLayout = new javax.swing.GroupLayout(deskpanel);
+        deskpanel.setLayout(deskpanelLayout);
+        deskpanelLayout.setHorizontalGroup(
+            deskpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 819, Short.MAX_VALUE)
         );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        deskpanelLayout.setVerticalGroup(
+            deskpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 526, Short.MAX_VALUE)
         );
 
-        jPanel7.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel7.setBackground(new java.awt.Color(204, 204, 255));
 
         jLabel16.setFont(new java.awt.Font("Yu Gothic UI", 3, 12)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(153, 153, 153));
@@ -283,19 +433,19 @@ public class Dash extends javax.swing.JFrame {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap(370, Short.MAX_VALUE)
+                .addContainerGap(383, Short.MAX_VALUE)
                 .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addGap(0, 9, Short.MAX_VALUE)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -303,12 +453,13 @@ public class Dash extends javax.swing.JFrame {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(deskpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -316,9 +467,9 @@ public class Dash extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(deskpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel5.setBackground(new java.awt.Color(204, 204, 204));
@@ -368,20 +519,330 @@ public class Dash extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
 
-    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel10MouseClicked
-
     private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel18MouseClicked
 
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        
+        int response = JOptionPane.showConfirmDialog(this, "Do you want to log out ?","",JOptionPane.YES_NO_CANCEL_OPTION);
+        if(response==JOptionPane.YES_OPTION){
+            LogReg.Lloguserid=0;
+            this.setVisible(false);
+            new LogReg("No").setVisible(true);
+        }
+        
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        
+       jLabel20.setForeground(new java.awt.Color(255,255,255));
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bill.png")));
+        uguyy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+        
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); 
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/restaurant.png")));
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel11.setForeground(new java.awt.Color(255,255,255));
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/myorder.png")));
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel12.setForeground(new java.awt.Color(255,255,255));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/orhis.png")));
+        jLabel23lkuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel13.setForeground(new java.awt.Color(255,255,255));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/profile.png")));
+        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+        
+        jLabel18.setText("Notyfication");
+        
+        Session session2=null;
+            session2=HibernateUtil.getSessionFactory().openSession();
+            final AtomicReference<ResultSet> selordr=new AtomicReference<>();
+            session2.doWork(connection->{
+                try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call countnoty(?)}")){
+                    cst.setInt(1, loguser);
+                    cst.execute();
+                    selordr.set(cst.getResultSet());
+                    try(ResultSet rs =cst.getResultSet()){
+                        while(rs.next()){
+                            
+                            jLabel19.setText(rs.getString("COUNT(notify_id)"));
+                            
+                        }
+                    }
+                }
+            });
+        
+        ontyinner nty=new ontyinner();
+        deskpanel.removeAll();
+        deskpanel.add(nty).setVisible(true);
+    }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void jTextField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyPressed
+    
+        
+    }//GEN-LAST:event_jTextField2KeyPressed
+
+    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
+        jLabel20.setForeground(new java.awt.Color(255,255,255));
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bill.png")));
+        uguyy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+        
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png"))); 
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/restaurant.png")));
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel11.setForeground(new java.awt.Color(255,255,255));
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/myorder.png")));
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel12.setForeground(new java.awt.Color(255,255,255));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/orhis.png")));
+        jLabel23lkuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel13.setForeground(new java.awt.Color(255,255,255));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/profile.png")));
+        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+        
+        jLabel18.setText("Search Result");
+        
+        String sword = jTextField2.getText();
+        
+        search se=new search(sword);
+        deskpanel.removeAll();
+        deskpanel.add(se).setVisible(true);
+    }//GEN-LAST:event_jTextField2KeyReleased
+
+    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2KeyTyped
+
+    private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
+        jLabel18.setText("feedback");
+
+        feedback feed=new feedback();
+        deskpanel.removeAll();
+        deskpanel.add(feed).setVisible(true);
+    }//GEN-LAST:event_jLabel23MouseClicked
+
+    private void jLabel21MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel21MouseClicked
+        jLabel21.setForeground(new java.awt.Color(0,255,255));
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/more_than.png")));
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home2.png")));
+
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/restaurant.png")));
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel11.setForeground(new java.awt.Color(255,255,255));
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/myorder.png")));
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel12.setForeground(new java.awt.Color(255,255,255));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/orhis.png")));
+        jLabel23lkuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel13.setForeground(new java.awt.Color(255,255,255));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/profile.png")));
+        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel20.setForeground(new java.awt.Color(255,255,255));
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bill.png")));
+        uguyy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel18.setText("Dash board");
+
+        homeinner hom=new homeinner();
+        deskpanel.removeAll();
+        deskpanel.add(hom).setVisible(true);
+
+    }//GEN-LAST:event_jLabel21MouseClicked
+
+    private void jLabel20MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel20MouseClicked
+
+        jLabel20.setForeground(new java.awt.Color(0,255,255));
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bill2.png")));
+        uguyy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/more_than.png")));
+
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png")));
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/restaurant.png")));
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel11.setForeground(new java.awt.Color(255,255,255));
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/myorder.png")));
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel12.setForeground(new java.awt.Color(255,255,255));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/orhis.png")));
+        jLabel23lkuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel13.setForeground(new java.awt.Color(255,255,255));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/profile.png")));
+        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel18.setText("Bill");
+
+        Billinner bill=new Billinner();
+        deskpanel.removeAll();
+        deskpanel.add(bill).setVisible(true);
+    }//GEN-LAST:event_jLabel20MouseClicked
+
+    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
+        jLabel13.setForeground(new java.awt.Color(0,255,255));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/profile2.png")));
+        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/more_than.png")));
+
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png")));
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/restaurant.png")));
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel11.setForeground(new java.awt.Color(255,255,255));
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/myorder.png")));
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel12.setForeground(new java.awt.Color(255,255,255));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/orhis.png")));
+        jLabel23lkuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel20.setForeground(new java.awt.Color(255,255,255));
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bill.png")));
+        uguyy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel18.setText("Profile");
+
+        Profile pro=new Profile();
+        deskpanel.removeAll();
+        deskpanel.add(pro).setVisible(true);
+    }//GEN-LAST:event_jLabel13MouseClicked
+
+    private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
+        jLabel12.setForeground(new java.awt.Color(0,255,255));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/orhis2.png")));
+        jLabel23lkuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/more_than.png")));
+
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png")));
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/restaurant.png")));
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel11.setForeground(new java.awt.Color(255,255,255));
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/myorder.png")));
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel13.setForeground(new java.awt.Color(255,255,255));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/profile.png")));
+        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel20.setForeground(new java.awt.Color(255,255,255));
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bill.png")));
+        uguyy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel18.setText("Order");
+
+        ordersumm osum=new ordersumm();
+        deskpanel.removeAll();
+        deskpanel.add(osum).setVisible(true);
+    }//GEN-LAST:event_jLabel12MouseClicked
+
+    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+        jLabel11.setForeground(new java.awt.Color(0,255,255));
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/delivery2.png")));
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/more_than.png")));
+
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png")));
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/restaurant.png")));
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel12.setForeground(new java.awt.Color(255,255,255));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/orhis.png")));
+        jLabel23lkuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel13.setForeground(new java.awt.Color(255,255,255));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/profile.png")));
+        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel20.setForeground(new java.awt.Color(255,255,255));
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bill.png")));
+        uguyy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel18.setText("New Order");
+
+        Myorderinner mo=new Myorderinner();
+        deskpanel.removeAll();
+        deskpanel.add(mo).setVisible(true);
+
+    }//GEN-LAST:event_jLabel11MouseClicked
+
+    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+        jLabel10.setForeground(new java.awt.Color(0,255,255));
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/restaurant2.png")));
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/more_than.png")));
+
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/home.png")));
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel11.setForeground(new java.awt.Color(255,255,255));
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/myorder.png")));
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel12.setForeground(new java.awt.Color(255,255,255));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/orhis.png")));
+        jLabel23lkuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel13.setForeground(new java.awt.Color(255,255,255));
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/profile.png")));
+        jLabel25.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel20.setForeground(new java.awt.Color(255,255,255));
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/bill.png")));
+        uguyy.setIcon(new javax.swing.ImageIcon(getClass().getResource("")));
+
+        jLabel18.setText("Products");
+
+        canteen cant=new canteen();
+        deskpanel.removeAll();
+        deskpanel.add(cant).setVisible(true);
+    }//GEN-LAST:event_jLabel10MouseClicked
+
+    public void setcanteen(){
+        canteen cant=new canteen();
+        deskpanel.add(cant).setVisible(true);
+        
+    }
     /**
      * @param args the command line arguments
      */
@@ -415,12 +876,13 @@ public class Dash extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Dash().setVisible(true);
+                new Dash("No").setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel deskpanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -431,7 +893,14 @@ public class Dash extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel23lkuy;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -449,14 +918,8 @@ public class Dash extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JSeparator jSeparator7;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel uguyy;
     // End of variables declaration//GEN-END:variables
 }

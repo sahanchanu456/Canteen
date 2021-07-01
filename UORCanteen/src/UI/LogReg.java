@@ -5,17 +5,35 @@
  */
 package UI;
 
+import static UI.LogReg2.session2;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import pojo.User;
+import sesion.HibernateUtil;
+
+
 /**
  *
  * @author G I U S Chamika
  */
 public class LogReg extends javax.swing.JFrame {
-
-    /**
-     * Creates new form LogReg
-     */
-    public LogReg() {
+    public static int Lloguserid=0;
+    String userregid=null;
+    static Session session=null;
+    String uname=null;
+    int usernameval=0;
+    public LogReg(String uname) {
         initComponents();
+        this.uname=uname;
+        if(uname=="No"){
+            usernamelog.setText("Enter Username");
+        }else{
+            usernamelog.setText(uname);
+        }
     }
 
     /**
@@ -38,10 +56,10 @@ public class LogReg extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        usernamelog = new javax.swing.JTextField();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        jPasswordField1log = new javax.swing.JPasswordField();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -49,10 +67,13 @@ public class LogReg extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
+        errorlog = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel2.setBackground(new java.awt.Color(51, 102, 255));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -115,32 +136,32 @@ public class LogReg extends javax.swing.JFrame {
         jLabel9.setText("Password?");
         jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 360, 90, 30));
 
-        jTextField2.setBackground(new java.awt.Color(78, 148, 148));
-        jTextField2.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 14)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(204, 204, 204));
-        jTextField2.setText("Enter Username");
-        jTextField2.setBorder(null);
-        jTextField2.setOpaque(false);
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        usernamelog.setBackground(new java.awt.Color(78, 148, 148));
+        usernamelog.setFont(new java.awt.Font("Yu Gothic UI Light", 1, 14)); // NOI18N
+        usernamelog.setForeground(new java.awt.Color(204, 204, 204));
+        usernamelog.setText("Enter Username");
+        usernamelog.setBorder(null);
+        usernamelog.setOpaque(false);
+        usernamelog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                usernamelogActionPerformed(evt);
             }
         });
-        jPanel4.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, 410, 30));
+        jPanel4.add(usernamelog, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, 410, 30));
         jPanel4.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 250, 400, 10));
         jPanel4.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 330, 400, 10));
 
-        jPasswordField1.setBackground(new java.awt.Color(78, 148, 148));
-        jPasswordField1.setForeground(new java.awt.Color(204, 204, 204));
-        jPasswordField1.setText("8 character");
-        jPasswordField1.setBorder(null);
-        jPasswordField1.setOpaque(false);
-        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+        jPasswordField1log.setBackground(new java.awt.Color(78, 148, 148));
+        jPasswordField1log.setForeground(new java.awt.Color(204, 204, 204));
+        jPasswordField1log.setText("8 character");
+        jPasswordField1log.setBorder(null);
+        jPasswordField1log.setOpaque(false);
+        jPasswordField1log.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordField1ActionPerformed(evt);
+                jPasswordField1logActionPerformed(evt);
             }
         });
-        jPanel4.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, 400, -1));
+        jPanel4.add(jPasswordField1log, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, 400, -1));
 
         jLabel11.setFont(new java.awt.Font("Yu Gothic UI", 1, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
@@ -159,7 +180,7 @@ public class LogReg extends javax.swing.JFrame {
 
         jLabel14.setBackground(new java.awt.Color(102, 102, 102));
         jLabel14.setFont(new java.awt.Font("Yu Gothic UI", 3, 12)); // NOI18N
-        jLabel14.setText("SCDveloper.com");
+        jLabel14.setText("Team");
         jPanel4.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 560, 90, 30));
 
         jLabel15.setFont(new java.awt.Font("Yu Gothic UI", 3, 12)); // NOI18N
@@ -179,7 +200,33 @@ public class LogReg extends javax.swing.JFrame {
 
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/login.png"))); // NOI18N
-        jPanel4.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 410, 150, 60));
+        jLabel17.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel17MouseClicked(evt);
+            }
+        });
+        jPanel4.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 420, 150, 60));
+
+        errorlog.setBackground(new java.awt.Color(0, 204, 204));
+        errorlog.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
+        errorlog.setForeground(new java.awt.Color(255, 0, 0));
+        jPanel4.add(errorlog, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 410, 30));
+
+        jLabel18.setFont(new java.awt.Font("Yu Gothic UI", 1, 12)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel18.setText("Admin");
+        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 90, 50, 30));
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel7.setText("Account?");
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, 50, 30));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -230,13 +277,13 @@ public class LogReg extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void usernamelogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernamelogActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_usernamelogActionPerformed
 
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+    private void jPasswordField1logActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1logActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
+    }//GEN-LAST:event_jPasswordField1logActionPerformed
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
          
@@ -252,42 +299,87 @@ public class LogReg extends javax.swing.JFrame {
         new LogReg2().setVisible(true);
     }//GEN-LAST:event_jLabel15MouseClicked
 
+    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
+        String usarname=usernamelog.getText();
+        String passwd=jPasswordField1log.getText();
+        String error_note4=null;
+        if((!usarname.isEmpty() && !usarname.equals("Enter Username")) && (!passwd.isEmpty() && !passwd.equals("8 character"))){
+            session=HibernateUtil.getSessionFactory().openSession();
+            Transaction tx=session.beginTransaction();
+            String user_sql="FROM User";
+            Query user_quary=session.createQuery(user_sql);
+
+            java.util.List <User>userList=user_quary.list();
+                for(Iterator<User> userIterator=userList.iterator();userIterator.hasNext();){
+                    User user=userIterator.next();
+                    if(user.getUserName().equals(usernamelog.getText()) && !user.getUserState().equals("Admin")){
+                        //encrip pwd
+                            String generatedPassword = null;
+                            try {
+
+                                MessageDigest md = MessageDigest.getInstance("MD5");
+                                md.update(jPasswordField1log.getText().getBytes());
+                                byte[] bytes = md.digest();
+                                StringBuilder sb = new StringBuilder();
+                                for(int i=0; i< bytes.length ;i++)
+                                {
+                                    sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+                                }
+                                generatedPassword = sb.toString();
+                            } 
+                            catch (NoSuchAlgorithmException e) 
+                            {
+                                e.printStackTrace();
+                            }
+                       if(user.getUserPassword().equals(generatedPassword)) {
+                           userregid=user.getUserReg();
+                           if(user.getUserEmailState().equals("Yes")){
+                                Lloguserid = user.getUserId();
+                                this.setVisible(false);
+                                new Dash("No").setVisible(true);
+                           }else{
+                                this.setVisible(false);
+                                new EmailValidate(userregid).setVisible(true);
+                           } 
+                       }else{
+                          usernameval=1;  
+                       }
+                    }else{
+                       usernameval=1; 
+                    }
+                }
+                
+            if(usernameval==1){
+                error_note4="Wrong Username or Password !";
+            }else{
+               error_note4=""; 
+            }
+               
+        }else{
+            error_note4="Some Field/s Empty !";
+        }
+        errorlog.setText(error_note4);
+    }//GEN-LAST:event_jLabel17MouseClicked
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        this.setVisible(false);
+        new Adminlog().setVisible(true);
+    }//GEN-LAST:event_jLabel7MouseClicked
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LogReg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LogReg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LogReg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LogReg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LogReg().setVisible(true);
+                new LogReg("No").setVisible(true);
             }
         });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel errorlog;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -296,19 +388,21 @@ public class LogReg extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JPasswordField jPasswordField1log;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField usernamelog;
     // End of variables declaration//GEN-END:variables
 }
