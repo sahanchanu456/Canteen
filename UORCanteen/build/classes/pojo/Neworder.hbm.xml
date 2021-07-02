@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 15, 2021 9:09:57 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="pojo.Neworder" table="neworder" catalog="canteen" optimistic-lock="version">
+        <id name="neworderId" type="java.lang.Integer">
+            <column name="neworder_id" />
+            <generator class="identity" />
+        </id>
+        <property name="neworderItemId" type="int">
+            <column name="neworder_item_id" not-null="true" />
+        </property>
+        <property name="neworderQuntity" type="int">
+            <column name="neworder_quntity" not-null="true" />
+        </property>
+        <property name="neworderDate" type="string">
+            <column name="neworder_date" length="200" not-null="true" />
+        </property>
+        <property name="neworderTime" type="string">
+            <column name="neworder_time" length="50" not-null="true" />
+        </property>
+        <property name="neworderUserId" type="int">
+            <column name="neworder_user_id" not-null="true" />
+        </property>
+        <property name="neworderNewAddres" type="string">
+            <column name="neworder_new_addres" length="250" not-null="true" />
+        </property>
+        <property name="neworderState" type="string">
+            <column name="neworder_state" length="50" not-null="true" />
+        </property>
+        <property name="neworderDelverId" type="int">
+            <column name="neworder_delver_id" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

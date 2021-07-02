@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jun 15, 2021 9:09:57 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="pojo.Reglist" table="reglist" catalog="canteen" optimistic-lock="version">
+        <id name="reglistRgId" type="string">
+            <column name="reglist_rg_id" length="50" />
+            <generator class="assigned" />
+        </id>
+        <property name="reglistName" type="string">
+            <column name="reglist_name" length="200" not-null="true" />
+        </property>
+        <property name="reglistAddress" type="string">
+            <column name="reglist_address" length="250" not-null="true" />
+        </property>
+        <property name="reglistState" type="string">
+            <column name="reglist_state" length="200" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
