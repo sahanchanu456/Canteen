@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Jul 3, 2021 10:54:01 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="pojo.Feedback" table="feedback" catalog="canteen" optimistic-lock="version">
+        <id name="feedbackId" type="java.lang.Integer">
+            <column name="feedback_id" />
+            <generator class="identity" />
+        </id>
+        <property name="feedbackUserId" type="int">
+            <column name="feedback_user_id" not-null="true" />
+        </property>
+        <property name="feedbackDate" type="date">
+            <column name="feedback_date" length="10" not-null="true" />
+        </property>
+        <property name="feedbackTitle" type="string">
+            <column name="feedback_title" length="200" not-null="true" />
+        </property>
+        <property name="feedbackNote" type="string">
+            <column name="feedback_note" length="800" not-null="true" />
+        </property>
+        <property name="feedbackState" type="string">
+            <column name="feedback_state" length="50" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

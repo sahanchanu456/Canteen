@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 /**
  *
@@ -139,7 +140,7 @@ public class Emailvalidation2 extends javax.swing.JFrame {
              String regex="\\d{6}";
             if(jTextField2.getText().matches(regex)==true){
             
-                session=HibernateUtil.getSessionFactory().openSession();
+                session=HibernateUtil1.getSessionFactory().openSession();
                 Transaction tx=session.beginTransaction();
                 String reglist_sql="FROM User";
                 Query reglist_quary=session.createQuery(reglist_sql);

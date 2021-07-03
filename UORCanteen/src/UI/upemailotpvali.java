@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 /**
  *
@@ -133,7 +134,7 @@ public class upemailotpvali extends javax.swing.JFrame {
         String otp = jTextField2kk.getText();
         if(!otp.isEmpty()){
             
-            session=HibernateUtil.getSessionFactory().openSession();
+            session=HibernateUtil1.getSessionFactory().openSession();
             Transaction tx=session.beginTransaction();
             String user_sql="FROM User";
             Query user_quary=session.createQuery(user_sql);

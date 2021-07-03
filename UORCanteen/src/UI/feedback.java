@@ -23,6 +23,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 /**
  *
@@ -39,7 +40,7 @@ public class feedback extends javax.swing.JInternalFrame {
         ui.setNorthPane(null);
         
         Session session=null;
-        session=HibernateUtil.getSessionFactory().openSession();
+        session=HibernateUtil1.getSessionFactory().openSession();
         final AtomicReference<ResultSet> itemid=new AtomicReference<>();
         session.doWork(connection->{
             try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call getusedata(?)}")){
@@ -212,7 +213,7 @@ public class feedback extends javax.swing.JInternalFrame {
         
         if(!feedtitle.isEmpty() && !Feednote.isEmpty()){
                 Session session5=null;
-                session5=HibernateUtil.getSessionFactory().openSession();
+                session5=HibernateUtil1.getSessionFactory().openSession();
                 final AtomicReference<ResultSet> feed=new AtomicReference<>();
                 session5.doWork(connection->{
                   try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call addfeed(?,?,?)}")){

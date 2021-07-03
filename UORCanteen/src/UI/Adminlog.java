@@ -6,14 +6,18 @@
 package UI;
 
 import static UI.LogReg.session;
+import com.mysql.jdbc.CallableStatement;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.ResultSet;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicReference;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 /**
  *
@@ -194,6 +198,17 @@ public class Adminlog extends javax.swing.JFrame {
                     if(user.getUserPassword().equals(generatedPassword)) {
                         
                             adminLlogid = user.getUserId();
+                            Session session4=null;
+                                session4=HibernateUtil.getSessionFactory().openSession();
+                                final AtomicReference<ResultSet> log=new AtomicReference<>();
+                                session4.doWork(connection->{
+                                    try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call logmaintain(?,?)}")){
+                                        cst.setInt(2, adminLlogid);
+                                        cst.setString(1, "log");
+                                        cst.execute();
+                                        
+                                    }
+                                });
                             this.setVisible(false);
                             new Dashadmin().setVisible(true);
                         

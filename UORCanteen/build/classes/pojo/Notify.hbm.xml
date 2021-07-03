@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated Jun 15, 2021 9:09:57 AM by Hibernate Tools 4.3.1 -->
+<!-- Generated Jul 3, 2021 10:54:01 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="pojo.Notify" table="notify" catalog="canteen" optimistic-lock="version">
         <id name="notifyId" type="java.lang.Integer">
@@ -22,6 +22,9 @@
         </property>
         <property name="notifyState" type="string">
             <column name="notify_state" length="20" not-null="true" />
+        </property>
+        <property name="notifyDate" type="date">
+            <column name="notify_date" length="10" not-null="true" />
         </property>
     </class>
 </hibernate-mapping>

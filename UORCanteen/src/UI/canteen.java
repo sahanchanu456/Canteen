@@ -21,6 +21,7 @@ import org.hibernate.Transaction;
 import pojo.Item;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 
 
@@ -39,7 +40,7 @@ public class canteen extends javax.swing.JInternalFrame {
         BasicInternalFrameUI ui=(BasicInternalFrameUI)this.getUI();
         ui.setNorthPane(null);
         
-        session=HibernateUtil.getSessionFactory().openSession();
+        session=HibernateUtil1.getSessionFactory().openSession();
             Transaction tx=session.beginTransaction();
             String item_sql="FROM Item";
             Query item_quary=session.createQuery(item_sql);

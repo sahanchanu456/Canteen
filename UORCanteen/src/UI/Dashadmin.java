@@ -18,6 +18,7 @@ import org.hibernate.Transaction;
 import pojo.Reglist;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 /**
  *
@@ -458,6 +459,19 @@ public class Dashadmin extends javax.swing.JFrame {
         
         int response = JOptionPane.showConfirmDialog(this, "Do you want to log out ?","",JOptionPane.YES_NO_CANCEL_OPTION);
         if(response==JOptionPane.YES_OPTION){
+            
+            Session session4=null;
+                                session4=HibernateUtil.getSessionFactory().openSession();
+                                final AtomicReference<ResultSet> log=new AtomicReference<>();
+                                session4.doWork(connection->{
+                                    try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call logmaintain(?,?)}")){
+                                        cst.setInt(2, loguser);
+                                        cst.setString(1, "out");
+                                        cst.execute();
+                                        
+                                    }
+                                });
+            
             LogReg.Lloguserid=0;
             this.setVisible(false);
             new LogReg("No").setVisible(true);

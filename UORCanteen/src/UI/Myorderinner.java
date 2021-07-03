@@ -19,6 +19,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 
 
@@ -38,7 +39,7 @@ public class Myorderinner extends javax.swing.JInternalFrame {
         ui.setNorthPane(null);
         
         Session session=null;
-            session=HibernateUtil.getSessionFactory().openSession();
+            session=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> order=new AtomicReference<>();
             session.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call billpendingdata(?)}")){
@@ -237,7 +238,7 @@ public class Myorderinner extends javax.swing.JInternalFrame {
       
        selectorderid = dmodel.getValueAt(selectindex, 7).toString();
        Session session2=null;
-            session2=HibernateUtil.getSessionFactory().openSession();
+            session2=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> selordr=new AtomicReference<>();
             session2.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call selectbilldata(?)}")){
@@ -261,7 +262,7 @@ public class Myorderinner extends javax.swing.JInternalFrame {
 
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
         Session session3=null;
-            session3=HibernateUtil.getSessionFactory().openSession();
+            session3=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> upordet=new AtomicReference<>();
             session3.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call updateorderstate(?,?)}")){
@@ -277,7 +278,7 @@ public class Myorderinner extends javax.swing.JInternalFrame {
             
             
             Session session5=null;
-            session5=HibernateUtil.getSessionFactory().openSession();
+            session5=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> selordr=new AtomicReference<>();
             session5.doWork(connection->{
                 try(CallableStatement cst2=(CallableStatement) connection.prepareCall("{call selectbilldata(?)}")){
@@ -304,7 +305,7 @@ public class Myorderinner extends javax.swing.JInternalFrame {
 
     private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
         Session session4=null;
-            session4=HibernateUtil.getSessionFactory().openSession();
+            session4=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> upordet=new AtomicReference<>();
             session4.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call updateorderstate(?,?)}")){
@@ -319,7 +320,7 @@ public class Myorderinner extends javax.swing.JInternalFrame {
             jLabel7.setText("Thank You! Order Again.");
             
             Session session5=null;
-            session5=HibernateUtil.getSessionFactory().openSession();
+            session5=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> selordr=new AtomicReference<>();
             session5.doWork(connection->{
                 try(CallableStatement cst2=(CallableStatement) connection.prepareCall("{call selectbilldata(?)}")){

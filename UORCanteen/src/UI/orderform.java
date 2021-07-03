@@ -17,6 +17,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.Neworder;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 /**
  *
@@ -33,7 +34,7 @@ public class orderform extends javax.swing.JFrame {
         this.orteritemid=itemId;
         
             Session session=null;
-            session=HibernateUtil.getSessionFactory().openSession();
+            session=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> item=new AtomicReference<>();
             session.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call getitemdetails(?)}")){
@@ -58,7 +59,7 @@ public class orderform extends javax.swing.JFrame {
             });
             
             Session session2=null;
-            session2=HibernateUtil.getSessionFactory().openSession();
+            session2=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> user=new AtomicReference<>();
             session2.doWork(connection->{
                 try(CallableStatement cst2=(CallableStatement) connection.prepareCall("{call getusedata(?)}")){
@@ -355,7 +356,7 @@ public class orderform extends javax.swing.JFrame {
     static Session session4=null;
     //user register 
     public static void order(Neworder e){
-        session4=HibernateUtil.getSessionFactory().openSession();
+        session4=HibernateUtil1.getSessionFactory().openSession();
         Transaction tx4=session4.beginTransaction();
         session4.save(e);
         tx4.commit();
@@ -377,7 +378,7 @@ public class orderform extends javax.swing.JFrame {
             datenow=date.format(thisDate);
             
             Session session3=null;
-            session3=HibernateUtil.getSessionFactory().openSession();
+            session3=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> deliver=new AtomicReference<>();
             session3.doWork(connection->{
                 try(CallableStatement cst3=(CallableStatement) connection.prepareCall("{call getdeliver()}")){
@@ -397,7 +398,7 @@ public class orderform extends javax.swing.JFrame {
                 Neworder e=new Neworder(orteritemid, selectq, datenow, timenow, loguser, address, "pending", deliverno);
                 order(e);
             Session session4=null;
-            session4=HibernateUtil.getSessionFactory().openSession();
+            session4=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> bill=new AtomicReference<>();
             session4.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call lastbilldata(?)}")){
@@ -430,7 +431,7 @@ public class orderform extends javax.swing.JFrame {
             });
             int uptotqun=(itemquntinew - selectq);
             Session session5=null;
-            session5=HibernateUtil.getSessionFactory().openSession();
+            session5=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> item=new AtomicReference<>();
             session5.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call upitemqun(?,?)}")){

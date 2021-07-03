@@ -16,6 +16,7 @@ import org.hibernate.Transaction;
 import pojo.Reglist;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 
 /**
@@ -312,7 +313,7 @@ public class LogReg2 extends javax.swing.JFrame {
    
     //user register 
     public static void regUser(User e){
-        session3=HibernateUtil.getSessionFactory().openSession();
+        session3=HibernateUtil1.getSessionFactory().openSession();
         Transaction tx3=session3.beginTransaction();
         session3.save(e);
         tx3.commit();
@@ -335,7 +336,7 @@ public class LogReg2 extends javax.swing.JFrame {
         //emty
         if((!reno.isEmpty() && !reno.equals("Enter Tg Number")) && (!un.isEmpty() && !un.equals("Enter Username")) && (!emails.isEmpty() && !emails.equals("Enter Email")) && (!pass.isEmpty() && !pass.equals("8 character"))){
             //regno validate real one use reglist tabel
-            session=HibernateUtil.getSessionFactory().openSession();
+            session=HibernateUtil1.getSessionFactory().openSession();
             Transaction tx=session.beginTransaction();
             String reglist_sql="FROM Reglist";
             Query reglist_quary=session.createQuery(reglist_sql);
@@ -353,7 +354,7 @@ public class LogReg2 extends javax.swing.JFrame {
                 }
              }           
             //username an regNo validate
-            session2=HibernateUtil.getSessionFactory().openSession();
+            session2=HibernateUtil1.getSessionFactory().openSession();
             Transaction tx2=session2.beginTransaction();
             String user_sql="FROM User";
             Query user_quary=session2.createQuery(user_sql);

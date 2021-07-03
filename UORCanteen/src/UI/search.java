@@ -21,6 +21,7 @@ import org.hibernate.Transaction;
 import pojo.Item;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 
 
@@ -39,7 +40,7 @@ public class search extends javax.swing.JInternalFrame {
         BasicInternalFrameUI ui=(BasicInternalFrameUI)this.getUI();
         ui.setNorthPane(null);
         
-        session=HibernateUtil.getSessionFactory().openSession();
+        session=HibernateUtil1.getSessionFactory().openSession();
             Transaction tx=session.beginTransaction();
             String item_sql="FROM Item";
             Query item_quary=session.createQuery(item_sql);
@@ -47,7 +48,7 @@ public class search extends javax.swing.JInternalFrame {
                 
                     
             Session session2=null;
-            session2=HibernateUtil.getSessionFactory().openSession();
+            session2=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> selordr=new AtomicReference<>();
             session2.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call getsearchdtails(?)}")){

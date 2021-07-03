@@ -19,6 +19,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 
 
@@ -38,7 +39,7 @@ public class ordersumm extends javax.swing.JInternalFrame {
         ui.setNorthPane(null);
         
         Session session=null;
-            session=HibernateUtil.getSessionFactory().openSession();
+            session=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> order=new AtomicReference<>();
             session.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call summorbill(?)}")){
@@ -202,7 +203,7 @@ public class ordersumm extends javax.swing.JInternalFrame {
       
        selectorderid = dmodel.getValueAt(selectindex, 7).toString();
        Session session2=null;
-            session2=HibernateUtil.getSessionFactory().openSession();
+            session2=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> selordr=new AtomicReference<>();
             session2.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call selectbilldata(?)}")){

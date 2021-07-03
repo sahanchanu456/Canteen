@@ -18,6 +18,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 
 
@@ -39,7 +40,7 @@ public class Billinner extends javax.swing.JInternalFrame {
         
         
             Session session=null;
-            session=HibernateUtil.getSessionFactory().openSession();
+            session=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> order=new AtomicReference<>();
             session.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call billdata(?)}")){
@@ -62,7 +63,7 @@ public class Billinner extends javax.swing.JInternalFrame {
             });
         
         Session session3=null;
-            session3=HibernateUtil.getSessionFactory().openSession();
+            session3=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> lastordr=new AtomicReference<>();
             session3.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call lastbilldata(?)}")){
@@ -345,7 +346,7 @@ public class Billinner extends javax.swing.JInternalFrame {
        String selectorderid = dmodel.getValueAt(selectindex, 0).toString();
        
         Session session2=null;
-            session2=HibernateUtil.getSessionFactory().openSession();
+            session2=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> selordr=new AtomicReference<>();
             session2.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call selectbilldata(?)}")){

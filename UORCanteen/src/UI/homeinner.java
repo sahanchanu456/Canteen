@@ -23,6 +23,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 /**
  *
@@ -46,7 +47,7 @@ public class homeinner extends javax.swing.JInternalFrame {
         if(nowhover.equals("06 AM") || nowhover.equals("07 AM") || nowhover.equals("08 AM") || nowhover.equals("09 AM") || nowhover.equals("10 AM")){
             String itemcatatype="Breakfast";
             Session session=null;
-            session=HibernateUtil.getSessionFactory().openSession();
+            session=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> catagory=new AtomicReference<>();
             session.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call gethomemaim(?)}")){
@@ -70,7 +71,7 @@ public class homeinner extends javax.swing.JInternalFrame {
             if(nowhover.equals("11 AM") || nowhover.equals("12 PM") || nowhover.equals("01 PM") ||nowhover.equals("02 PM") || nowhover.equals("03 PM")){
                 String itemcatatype="Lunch";
                 Session session=null;
-                session=HibernateUtil.getSessionFactory().openSession();
+                session=HibernateUtil1.getSessionFactory().openSession();
                 final AtomicReference<ResultSet> catagory=new AtomicReference<>();
                 session.doWork(connection->{
                     try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call gethomemaim(?)}")){
@@ -92,7 +93,7 @@ public class homeinner extends javax.swing.JInternalFrame {
              if(nowhover.equals("05 PM") || nowhover.equals("06 PM") || nowhover.equals("07 PM") ||nowhover.equals("08 PM")){
                 String itemcatatype="Dinner";
                 Session session=null;
-                session=HibernateUtil.getSessionFactory().openSession();
+                session=HibernateUtil1.getSessionFactory().openSession();
                 final AtomicReference<ResultSet> catagory=new AtomicReference<>();
                 session.doWork(connection->{
                     try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call gethomemaim(?)}")){

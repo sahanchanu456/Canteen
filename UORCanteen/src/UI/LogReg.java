@@ -6,14 +6,18 @@
 package UI;
 
 import static UI.LogReg2.session2;
+import com.mysql.jdbc.CallableStatement;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.ResultSet;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicReference;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 
 /**
@@ -304,7 +308,7 @@ public class LogReg extends javax.swing.JFrame {
         String passwd=jPasswordField1log.getText();
         String error_note4=null;
         if((!usarname.isEmpty() && !usarname.equals("Enter Username")) && (!passwd.isEmpty() && !passwd.equals("8 character"))){
-            session=HibernateUtil.getSessionFactory().openSession();
+            session=HibernateUtil1.getSessionFactory().openSession();
             Transaction tx=session.beginTransaction();
             String user_sql="FROM User";
             Query user_quary=session.createQuery(user_sql);
@@ -335,6 +339,19 @@ public class LogReg extends javax.swing.JFrame {
                            userregid=user.getUserReg();
                            if(user.getUserEmailState().equals("Yes")){
                                 Lloguserid = user.getUserId();
+                                
+                                Session session4=null;
+                                session4=HibernateUtil1.getSessionFactory().openSession();
+                                final AtomicReference<ResultSet> log=new AtomicReference<>();
+                                session4.doWork(connection->{
+                                    try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call logmaintain(?,?)}")){
+                                        cst.setInt(2, Lloguserid);
+                                        cst.setString(1, "log");
+                                        cst.execute();
+                                        
+                                    }
+                                });
+                                
                                 this.setVisible(false);
                                 new Dash("No").setVisible(true);
                            }else{

@@ -5,6 +5,7 @@
  */
 package UI;
 
+import static UI.Adminlog.adminLlogid;
 import static UI.LogReg2.session;
 import static UI.LogReg2.session2;
 import com.mysql.jdbc.CallableStatement;
@@ -18,6 +19,7 @@ import org.hibernate.Transaction;
 import pojo.Reglist;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 /**
  *
@@ -33,7 +35,7 @@ public class Dash extends javax.swing.JFrame {
         loguser=LogReg.Lloguserid;
         
         if(page.equals("No")){
-            session=HibernateUtil.getSessionFactory().openSession();
+            session=HibernateUtil1.getSessionFactory().openSession();
             Transaction tx=session.beginTransaction();
             String user_sql="FROM User";
             Query user_quary=session.createQuery(user_sql);
@@ -58,7 +60,7 @@ public class Dash extends javax.swing.JFrame {
         }
         
         Session session2=null;
-            session2=HibernateUtil.getSessionFactory().openSession();
+            session2=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> selordr=new AtomicReference<>();
             session2.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call countnoty(?)}")){
@@ -534,6 +536,19 @@ public class Dash extends javax.swing.JFrame {
         
         int response = JOptionPane.showConfirmDialog(this, "Do you want to log out ?","",JOptionPane.YES_NO_CANCEL_OPTION);
         if(response==JOptionPane.YES_OPTION){
+            
+            Session session4=null;
+                                session4=HibernateUtil1.getSessionFactory().openSession();
+                                final AtomicReference<ResultSet> log=new AtomicReference<>();
+                                session4.doWork(connection->{
+                                    try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call logmaintain(?,?)}")){
+                                        cst.setInt(2, loguser);
+                                        cst.setString(1, "out");
+                                        cst.execute();
+                                        
+                                    }
+                                });
+            
             LogReg.Lloguserid=0;
             this.setVisible(false);
             new LogReg("No").setVisible(true);
@@ -570,7 +585,7 @@ public class Dash extends javax.swing.JFrame {
         jLabel18.setText("Notyfication");
         
         Session session2=null;
-            session2=HibernateUtil.getSessionFactory().openSession();
+            session2=HibernateUtil1.getSessionFactory().openSession();
             final AtomicReference<ResultSet> selordr=new AtomicReference<>();
             session2.doWork(connection->{
                 try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call countnoty(?)}")){

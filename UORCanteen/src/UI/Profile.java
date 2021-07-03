@@ -23,6 +23,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 /**
  *
@@ -41,7 +42,7 @@ public class Profile extends javax.swing.JInternalFrame {
         
         
         Session session=null;
-        session=HibernateUtil.getSessionFactory().openSession();
+        session=HibernateUtil1.getSessionFactory().openSession();
         final AtomicReference<ResultSet> itemid=new AtomicReference<>();
         session.doWork(connection->{
             try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call getusedata(?)}")){
@@ -415,7 +416,7 @@ public class Profile extends javax.swing.JInternalFrame {
                     if(uptel.matches(regex)==true && !uptel.equals("000-0000000")){ 
                         int unupstate=0;
                         //username an regNo validate
-                         session2=HibernateUtil.getSessionFactory().openSession();
+                         session2=HibernateUtil1.getSessionFactory().openSession();
                          Transaction tx2=session2.beginTransaction();
                          String user_sql="FROM User";
                          Query user_quary=session2.createQuery(user_sql);
@@ -436,7 +437,7 @@ public class Profile extends javax.swing.JInternalFrame {
                              eroorlod5.setText("");
                          }else{
                              Session session3=null;
-                             session3=HibernateUtil.getSessionFactory().openSession();
+                             session3=HibernateUtil1.getSessionFactory().openSession();
                              final AtomicReference<ResultSet> itemid=new AtomicReference<>();
                              session3.doWork(connection->{
                                   try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call updateud1(?,?,?)}")){
@@ -495,7 +496,7 @@ public class Profile extends javax.swing.JInternalFrame {
                         }
                            
                             Session session4=null;
-                            session4=HibernateUtil.getSessionFactory().openSession();
+                            session4=HibernateUtil1.getSessionFactory().openSession();
                             Transaction tx=session4.beginTransaction();
                             String reglist_sql="FROM User";
                             Query reglist_quary=session4.createQuery(reglist_sql);
@@ -549,7 +550,7 @@ public class Profile extends javax.swing.JInternalFrame {
                 String otp2= new DecimalFormat("000000").format(new Random().nextInt(999999));
                 
                 Session session5=null;
-                session5=HibernateUtil.getSessionFactory().openSession();
+                session5=HibernateUtil1.getSessionFactory().openSession();
                 final AtomicReference<ResultSet> itemid=new AtomicReference<>();
                 session5.doWork(connection->{
                   try(CallableStatement cst=(CallableStatement) connection.prepareCall("{call upotp(?,?)}")){

@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pojo.User;
 import sesion.HibernateUtil;
+import sesion.HibernateUtil1;
 
 
 /**
@@ -139,7 +140,7 @@ public class EmailValidate extends javax.swing.JFrame {
             if(jTextField2.getText().matches(regex)==true && !telno.equals("000-0000000")){
                  if(regid!="No"){
                     //update tel no:
-                    session=HibernateUtil.getSessionFactory().openSession();
+                    session=HibernateUtil1.getSessionFactory().openSession();
                     Transaction tx=session.beginTransaction();
                     String reglist_sql="FROM User";
                     Query reglist_quary=session.createQuery(reglist_sql);
